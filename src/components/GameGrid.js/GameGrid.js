@@ -8,6 +8,12 @@ const GameGrid = ({ gridItems }) => {
   const [prevClickedCard, setPrevClickedCard] = useState(null);
   const [currClickedCard, setCurrClickedCard] = useState(null);
 
+  const handleChoice = (card) => {
+    prevClickedCard && prevClickedCard !== card
+      ? setCurrClickedCard(card)
+      : setPrevClickedCard(card);
+  };
+
   const getMatchingId = (cardArr) => {
     const matchingId = cardArr[0].matchingId;
     return cardArr.every((card) => card.matchingId === matchingId)
@@ -16,11 +22,8 @@ const GameGrid = ({ gridItems }) => {
   };
 
   const handleCardClick = (clickedCard) => {
-    if (!prevClickedCard) {
+    if (!prevClickedCard || !currClickedCard) {
       setPrevClickedCard(clickedCard);
-      setCurrClickedCard(clickedCard);
-      console.log(clickedCard);
-      console.log("ccc");
       // const updatedCards = cards.map((card) =>
       //   card.id === clickedCard.id ? { ...card, showLogo: true } : card
       // );
@@ -38,7 +41,7 @@ const GameGrid = ({ gridItems }) => {
       setCards(updatedCards);
     }
     setTimeout(() => setPrevClickedCard(null), 1000);
-    setTimeout(() => setCurrentCard(null), 1000);
+    // setTimeout(() => setCurrClickedCard(null), 1000);
   };
 
   return (
@@ -47,13 +50,18 @@ const GameGrid = ({ gridItems }) => {
         const showLogo = prevClickedCard
           ? card.id === prevClickedCard?.id
           : card.hasMatched;
-        console.log(!!showLogo);
+        // console.log(!!showLogo);
         return (
           <Card
             key={card.id}
             onCardClick={handleCardClick}
             showLogo={!!showLogo}
-            flipped={card.id === card.hasMatched}
+            onChoice={handleChoice}
+            flipped={
+              card === currClickedCard ||
+              card === prevClickedCard ||
+              card === card.hasMatched
+            }
             {...card}
           />
         );

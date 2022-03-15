@@ -1,9 +1,10 @@
 import CardImage from "../CardImage/CardImage";
 import InitialImage from "../InitialImage/InitialImage";
 
-const Card = ({ onCardClick, showLogo, flipped, ...cardData }) => {
+const Card = ({ onCardClick, showLogo, onChoice, flipped, ...cardData }) => {
   const handleClick = (cardData) => {
     onCardClick(cardData);
+    onChoice(cardData);
   };
   const { id, logo, hasMatched } = cardData;
   // console.log({ hasMatched });
@@ -15,7 +16,13 @@ const Card = ({ onCardClick, showLogo, flipped, ...cardData }) => {
     <div onClick={() => handleClick(cardData)}>
       <p>{cardData.matchingId}</p>
 
-      {showLogo || hasMatched ? (
+      {/* {showLogo || hasMatched ? (
+        <CardImage id={id} imageSrc={logo} />
+      ) : (
+        <InitialImage />
+      )} */}
+
+      {showLogo || flipped || hasMatched ? (
         <CardImage id={id} imageSrc={logo} />
       ) : (
         <InitialImage />
